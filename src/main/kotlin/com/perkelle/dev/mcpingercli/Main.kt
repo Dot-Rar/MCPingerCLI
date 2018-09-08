@@ -1,5 +1,6 @@
 package com.perkelle.dev.mcpingercli
 
+import org.json.JSONObject
 import java.util.*
 
 fun main(args: Array<String>) {
@@ -21,6 +22,14 @@ fun main(args: Array<String>) {
     val response = pinger.getServerInfo()
 
     response.keySet().forEach { key ->
-        println("key: ${response[key]}")
+        val value = response[key]
+
+        if(value is JSONObject) {
+            value.keySet().forEach { key ->
+                println("$key: ${value[key]}")
+            }
+        }
+
+        else println("$key: ${response[key]}")
     }
 }

@@ -80,7 +80,6 @@ class ServerPinger(val host: String, val port: Int = 25565, val stripColour: Boo
             val address = InetSocketAddress(this.host, this.port)
             if(address.isUnresolved) {
                 return json {
-                    put("httpCode", 200)
                     put("success", false)
                     put("error", "The target cannot be resolved")
                 }
@@ -172,7 +171,6 @@ class ServerPinger(val host: String, val port: Int = 25565, val stripColour: Boo
                     motd,
                     jsonIn.getJSONObject("players").getInt("online"),
                     jsonIn.getJSONObject("players").getInt("max"),
-                    jsonIn.getString("favicon"),
                     jsonIn.getJSONObject("version").getInt("protocol"),
                     jsonIn.getJSONObject("version").getString("name"),
                     (System.currentTimeMillis()-dataIn.readLong()).toInt()
@@ -185,14 +183,12 @@ class ServerPinger(val host: String, val port: Int = 25565, val stripColour: Boo
             out.close()
 
             return json {
-                put("httpCode", 200)
                 put("success", true)
                 put("response", response.toJson())
             }
         } catch(ex: Exception) {
             ex.printStackTrace()
             return json {
-                put("httpCode", 200)
                 put("success", false)
                 put("error", "The requested server is offline")
             }
@@ -201,7 +197,6 @@ class ServerPinger(val host: String, val port: Int = 25565, val stripColour: Boo
 
     fun invalidPacket(): JSONObject {
         return json {
-            put("httpCode", 200)
             put("success", false)
             put("error", "Invalid response from the server ")
         }
@@ -232,7 +227,6 @@ class ServerPinger(val host: String, val port: Int = 25565, val stripColour: Boo
             val motd: String,
             val playerCount: Int,
             val maxPlayers: Int,
-            val favicon: String,
             val protocol: Int,
             val versionName: String,
             val ping: Int
@@ -245,7 +239,6 @@ class ServerPinger(val host: String, val port: Int = 25565, val stripColour: Boo
         put("motd", motd)
         put("playerCount", playerCount)
         put("maxPlayers", maxPlayers)
-        put("favicon", favicon)
         put("protocol", protocol)
         put("versionName", versionName)
         put("ping", ping)
